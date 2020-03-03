@@ -159,5 +159,159 @@ https://schema.org/Movie
 
 // 11. HTMLElement.itemType - эксперементальное API
 
-/* Только для чтения. */
+/* Только для чтения.
+Определяет URL словаря, который будет использоваться для определения itemprops (свойства элемента) в структуре данных.
+Itemprops используется для установки области, в которой в структуре данных будет активен словарь заданный itemtype.  */
 
+// 12. HTMLElement.itemId - эксперементальное API
+
+/* Глобальный атрибут itemid предоставляет микроданные в форме уникального глобального идентификатора элемента. Атрибут itemid может
+быть указан только для элемента, который имеет атрибуты itemscope и itemtype. Кроме того, itemid может быть указан только для
+элементов, которые обладают атрибутом itemscope, соответствующий тип элемента которого ссылается или определяет словарь, который
+поддерживает глобальныее идентификаторы.
+Точное значение глобального идентификатора типа элемента обеспечивается определением этого идентификатора в указанном словаре.
+Словарь определяет, могут ли сосуществовать нескольео элементов с одним и тем же глобальным идентификатором, и, если да, то, как
+обрабатываютс элементы с одним и тем же идентификатором.
+Пример: 
+Для словаря http://schema.org/Book, который описывает книги, в качестве идентификатора может служить ISBN — 
+уникальный международный номер книжного издания.
+*/
+
+// 13. HTMLElement.itemRef - эксперементальное API
+
+/* Только для чтения 
+Иногда так получается, что данные, относящиеся к размечаемому объекту, находятся за пределами "корневого" элемента. Специально для этого
+случая предусмотрен атрибут itemref. Он применяется к элементу с itemscope и содержит id другого DOM-элемента, где находятся остальные
+свойства. Можно указать через пробел идентификаторы нескольких элементов.
+Пример: из=за особенностей оформления страницы, автор и комментарии к статье физически не могут находиться внутри <article></article>
+<div itemscope itemtype="http://schema.org/Person" itemprop="author" id="author">
+    <a itemprop="name url" href="http://noteskeeper.ru/about/">
+        Владимир Кузнецов
+    </a>
+    </div>
+
+    <article itemscope itemtype="http://schema.org/Article" itemref="author comments">
+    <header>
+        <h2 itemprop="name">Особенности микроразметки microdata</h2>
+        <link itemprop="url" href="http://noteskeeper.ru/758/">
+    </header>
+    <div itemprop="articleBody">
+        ... статья ...
+    </div>
+    </article>
+
+    <section id="comments">
+    <div itemprop="comment" itemscope itemtype="http://schema.org/UserComments">
+        <div itemprop="name commentText">
+        ... комментарий 1 ...
+        </div>
+    </div>
+    <div itemprop="comment" itemscope itemtype="http://schema.org/UserComments">
+        <div itemprop="name commentText">
+        ... комментарий 2 ...
+        </div>
+    </div>
+    </section>
+    Автор статьи и комментарии примешались в основной поток свойств статьи так как, если бы они были фактически размещены там.
+    Порядок следования свойств не оказывает никакого влияния на структуру. Парсер просто перечисляет их по мерер обхода документа.
+    Структура выглядит следующим образом:
+    @type	Article
+    name	            Особенности микроразметки microdata
+    url	                http://noteskeeper.ru/758/
+    articleBody	        ... статья ...
+    author	
+        @type	        Person
+        @id	            https://search.google.com/structured-data/testing-tool/author
+        name	        http://noteskeeper.ru/about/
+        url             http://noteskeeper.ru/about/
+    comments
+        @type           UserComments – недопустимый тип целевого объекта для свойства comment.
+	    commentText	    ... комментарий 1 ...
+        name	..      ... комментарий 1 ...
+    comments
+        @type           UserComments – недопустимый тип целевого объекта для свойства comment.
+	    commentText	    ... комментарий 1 ...
+        name	..      ... комментарий 1 ...
+*/
+
+// 14. HTMLElement.itemProp - эксперементальное API
+
+/* Только для чтения
+Глобальный атрибут itemprop используется для добавления свойств к элементу. Каждый элемент HTML может иметь указанный атрибут itemprop, 
+а itemprop состоит из пары имя-значение. Каждая пара имя-значение называется свойством, а группа из одного или нескольких свойств 
+образует элемент. Значения свойства являются либо строкой, либо URL-адресом и могут быть связаны с очень широким диапазоном элементов, 
+включая <audio>, <embed>, <iframe>, <img>, <link>, <object>, <source>, < дорожка> и <видео>. 
+В приведенном ниже примере показан источник для набора элементов, размеченных с помощью атрибутов itemprop, а затем таблица, 
+показывающая полученные структурированные данные.
+<div itemscope itemtype="http://schema.org/Movie">
+    <h1 itemprop="name">Avatar</h1>
+    <span>Director:
+        <span itemprop="director">James Cameron</span>
+        (born August 16, 1954)</span>
+    <span itemprop="genre">Science fiction</span>
+    <a href="../movies/avatar-theatrical-trailer.html"
+    itemprop="trailer">Trailer</a>
+</div>
+Результат:
+itemprop	name	    Avatar
+itemprop	director	James Cameron
+itemprop	genre	    Science fiction
+itemprop	trailer	    ../movies/avatar-theatrical-trailer.html
+
+Свойства имеют значения, которые являются либо строкой, либо URL-адресом. Если строковое значение является URL-адресом, 
+оно выражается с использованием элемента <a> и его атрибута href, элемента <img> и его атрибута src или других элементов, 
+которые ссылаются на внешние ресурсы или встраивают их.
+Пример строкового выражения:
+<div itemscope>
+    <p>My name is
+    <span itemprop="name">Neil</span>.</p>
+    <p>My band is called
+    <span itemprop="band">Four Parts Water</span>.</p>
+    <p>I am
+    <span itemprop="nationality">British</span>.</p>
+    </div>
+Пример с изображением:
+    <div itemscope>
+        <img itemprop="image"
+            src="google-logo.png" alt="Google">
+    </div>
+Для сложных значений можно применить значения value, а в itemprops применить понятный человеку язык
+Пример:
+    <h1 itemscope>
+        <data itemprop="product-id"
+            value="9678AOU879">The Instigator 2000</data>
+    </h1>
+Для метрик использовать min, max, value
+    <div itemscope itemtype="http://schema.org/Product">
+        <span itemprop="name">Panasonic White
+            60L Refrigerator</span>
+        <img src="panasonic-fridge-60l-white.jpg" alt="">
+            <div itemprop="aggregateRating"
+                itemscope
+                itemtype="http://schema.org/AggregateRating">
+            <meter itemprop="ratingValue"
+                min=0 value=3.5 max=5>Rated 3.5/5</meter>
+            (based on <span
+                itemprop="reviewCount">11</span>
+                customer reviews)
+            </div>
+    </div>
+    Для даты использовать datetime:
+    <div itemscope>
+        I was born on <time
+        itemprop="birthday"
+        datetime="2009-05-10">May 10th 2009</time>
+    </div>*/
+
+// var q = document.querySelector('#q');
+// q.className = 'color';
+
+function pow(x, n) {
+    if (n == 1) {
+      return x;
+    } else {
+      return x * pow(x, n - 1);
+    }
+  }
+  
+  alert( pow(2, 3) ); // 8

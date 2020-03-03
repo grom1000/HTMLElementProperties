@@ -6,28 +6,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="css.css">
-  <style>
-    #link {
-      cursor: pointer;
-      color: blue;
-      text-decoration: underline;
-    }
-  </style>
-  <script>
-    function showForm() {
-      document.getElementById("auth").hidden = false;
-      document.getElementById("link").hidden = true;
-    }
-  </script>
 </head>
 
 <body>
-  <div itemscope itemtype="http://schema.org/Movie">
-    <h1 itemprop="name">Avatar</h1>
-    <span>Director: <span itemprop="director">James Cameron</span> (born August 16, 1954)</span>
-    <span itemprop="genre">Science fiction</span>
-    <a href="https://youtu.be/0AY1XIkX7bY" itemprop="trailer">Trailer</a>
+  <div itemscope itemtype="http://schema.org/Person" itemprop="author" id="author">
+    <a itemprop="name url" href="http://noteskeeper.ru/about/">
+      Владимир Кузнецов
+    </a>
   </div>
+  
+  <article itemscope itemtype="http://schema.org/Article" itemref="author comments">
+    <header>
+      <h2 itemprop="name">Особенности микроразметки microdata</h2>
+      <link itemprop="url" href="http://noteskeeper.ru/758/">
+    </header>
+    <div itemprop="articleBody" id="q">
+      ... статья ...
+    </div>
+  </article>
+  
+  <section id="comments">
+    <div itemprop="comment" itemscope itemtype="http://schema.org/UserComments">
+      <div itemprop="name commentText">
+        ... комментарий 1 ...
+      </div>
+    </div>
+    <div itemprop="comment" itemscope itemtype="http://schema.org/UserComments">
+      <div itemprop="name commentText">
+        ... комментарий 2 ...
+      </div>
+    </div>
+  </section>
   <script src="js.js"></script>
 </body>
 
